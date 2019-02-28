@@ -20,7 +20,8 @@ If installing Hyperledger Composer using Linux, be aware of the following advice
 - Avoid installing node globally as root.**
 
 ## Examples
-- config.json - Hyperledger Fabric config example
+- config.json - Hyperledger Explorer config example
+- config_v0.3.4.json - Hyperledger Explorer config example (v0.3.4)
 - model.cto - Network models example
 
 ## Instructions
