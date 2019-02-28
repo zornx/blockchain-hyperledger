@@ -171,6 +171,116 @@ Fix Error message: Invalid Host header
 - In node_modules/webpack-dev-server/lib/Server.js change:
   - "if(this.disableHostCheck) return true;" to "return true;"
 
+### Setup Hyperledger Explorer
+Versions tested:
+- Latest - Not working
+- v0.3.7.1 - Not working
+- v0.3.7 - Not working
+- v0.3.6 - Not working
+- v0.3.5.1 - Working (Tests failed)
+- v0.3.5 - Working (Tests failed)
+- v0.3.4 - Working (Current used)
+- v0.3.3 - Working
+
+```sh
+$ sudo apt update && sudo apt upgrade
+$ git clone --branch v0.3.4 https://github.com/hyperledger/blockchain-explorer.git
+```
+
+#### Install JQ (v1.5) (v1.6 not working)
+```sh
+$ wget https://github.com/stedolan/jq/releases/download/jq-1.5/jq-1.5.tar.gz
+$ tar -xvzf jq-1.5.tar.gz
+$ cd jq-1.5
+$ ./configure && make && sudo make install
+$ jq --version
+```
+
+#### Install PostgreSQL
+```sh
+$ sudo apt install postgresql postgresql-contrib
+$ sudo pg_createcluster 10 main --start
+$ psql --version
+```
+
+#### Start Hyperledger Fabric Network
+```sh
+$ cd ~/fabric-dev-servers
+$ ./startFabric.sh
+```
+
+#### Configure PostgreSQL DB
+```sh
+$ sudo -u postgres psql
+$ \i app/persistence/postgreSQL/db/explorerpg.sql
+$ \i app/persistence/postgreSQL/db/updatepg.sql
+$ \l
+$ \d
+$ \q
+```
+
+#### Configure Explorer
+Save backup:
+```sh
+$ cd blockchain-explorer/app/platform/fabric
+$ cp config.json config_backup.json
+```
+Check info:
+```sh
+$ nano ~/fabric-dev-servers/DevServer_connection.json
+```
+Change on:
+```sh
+$ cd blockchain-explorer/app/platform/fabric
+$ nano config.json
+```
+Add:
+"channel": "mychannel",
+"pg": {
+  "host": "127.0.0.1",
+  "port": "5432",
+  "database": "fabricexplorer",
+  "username": "hppoc",
+  "passwd": "password"
+}
+
+#### Run Explorer tests
+Save backup:
+```sh
+$ cd blockchain-explorer
+$ npm install
+$ npm audit fix
+$ cd app/test
+$ npm install
+$ npm audit fix
+$ npm run test
+$ cd ../../client
+$ npm install
+$ npm audit fix
+$ npm test -- -u --coverage
+```
+Fix error: getBlockActivity is not a function
+- https://stackoverflow.com/questions/52174042/error-in-hyperledger-explorer-configuration
+```sh
+$ cd blockchain-explorer
+$ nano ~/blockchain-explorer/client/src/components/View/LandingPage.spec.js
+```
+Add entry on file client\src\components\View\LandingPage.spec.js:
+- Add: getBlockActivity:jest.fn(),
+```sh
+$ npm run build
+``
+
+#### Start/Stop Explorer
+Save backup:
+```sh
+$ cd blockchain-explorer
+$ ./start.sh
+$ ./stop.sh
+```
+Check Explorer: http://localhost:8080
+
+
 ## References
 https://hyperledger-fabric.readthedocs.io/en/release-1.4/
 
