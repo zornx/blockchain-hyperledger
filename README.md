@@ -19,6 +19,10 @@ If installing Hyperledger Composer using Linux, be aware of the following advice
 - Do not use npm with sudo or su to root to use it.
 - Avoid installing node globally as root.**
 
+## Examples
+- config.json - Hyperledger Fabric config example
+- model.cto - Network models example
+
 ## Instructions
 ### Setup Environment
 ```sh
