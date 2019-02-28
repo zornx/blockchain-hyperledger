@@ -1,0 +1,20 @@
+/**
+ * Network Example
+ */
+namespace org.example.mynetwork
+
+asset Record identified by recordId {
+    o String recordId
+    o String description
+    --> Organization org
+}
+
+participant Organization identified by orgId {
+    o String orgId
+    o String name
+}
+
+transaction Action {
+    --> Record record
+    --> Organization newOrg
+}
